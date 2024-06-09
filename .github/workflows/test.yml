@@ -1,0 +1,33 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14, 16, 18]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm install
+    - run: npm test
+      env:
+        PUBLIC_KEY: ${{ secrets.PUBLIC_KEY }}
+        PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+        KYTE_ACCOUNT: ${{ secrets.KYTE_ACCOUNT }}
+        KYTE_IDENTIFIER: ${{ secrets.KYTE_IDENTIFIER }}
+        KYTE_ENDPOINT: ${{ secrets.KYTE_ENDPOINT }}
+        KYTE_APP_ID: ${{ secrets.KYTE_APP_ID }}
+        KYTE_TEST_MODEL: ${{ secrets.KYTE_TEST_MODEL }}
