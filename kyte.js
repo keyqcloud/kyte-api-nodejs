@@ -86,8 +86,11 @@ class KyteClient {
     if (response.status !== 200) {
       throw new Error(`HTTP Error: ${response.status} - ${response.data}`);
     }
-    this.sessionToken = response.session;
-    this.transactionToken = response.token;
+    if (!response.data.session || !response.data.token) {
+        throw new Error('Failed to retrieve sessionToken or transactionToken');
+    }
+    this.sessionToken = response.data.session;
+    this.transactionToken = response.data.token;
     return response.data;
   }
 

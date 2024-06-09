@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.4]
+### Fixed
+- Fixed issue with session and tx token not correctly updated after each request.
+
 ## [1.0.3]
 ### Added
 - Added detailed error handling for `hmacSha256` method.

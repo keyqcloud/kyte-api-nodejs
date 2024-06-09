@@ -1,6 +1,6 @@
 {
   "name": "kyte-api-nodejs",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Kyte API Client Library",
   "main": "kyte.js",
   "scripts": {
