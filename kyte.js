@@ -36,8 +36,7 @@ class KyteClient {
   }
 
   async getSignature(epoch) {
-    const txToken = '0';
-    const key1 = this.hmacSha256(txToken, Buffer.from(this.privateKey, 'utf-8'));
+    const key1 = this.hmacSha256(this.transactionToken, Buffer.from(this.privateKey, 'utf-8'));
     const key2 = this.hmacSha256(this.kyteIdentifier, key1);
     return this.bytesToHex(this.hmacSha256(epoch, key2));
   }
@@ -87,6 +86,8 @@ class KyteClient {
     if (response.status !== 200) {
       throw new Error(`HTTP Error: ${response.status} - ${response.data}`);
     }
+    this.sessionToken = response.session;
+    this.transactionToken = response.token;
     return response.data;
   }
 
@@ -111,8 +112,11 @@ class KyteClient {
     data[this.usernameField] = username;
     data[this.passwordField] = password;
     const result = await this.post('Session', data);
-    this.sessionToken = result.sessionToken;
-    this.transactionToken = result.transactionToken;
+    if (!result.session || !result.token) {
+        throw new Error('Failed to retrieve sessionToken or transactionToken');
+    }
+    this.sessionToken = result.session;
+    this.transactionToken = result.token;
     return result;
   }
 }
